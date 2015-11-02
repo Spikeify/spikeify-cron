@@ -27,25 +27,25 @@ public class UrlUtilsTest {
 	@Test
 	public void testGetFullUrl()
 	{
-		assertEquals("http://iddiction.com", UrlUtils.getFullUrl("http://iddiction.com", null));
-		assertEquals("http://iddiction.com", UrlUtils.getFullUrl("http://iddiction.com/", null));
+		assertEquals("http://spiekeify.com", UrlUtils.getFullUrl("http://spiekeify.com", null));
+		assertEquals("http://spiekeify.com", UrlUtils.getFullUrl("http://spiekeify.com/", null));
 
-		assertEquals("http://iddiction.com/", UrlUtils.getFullUrl("http://iddiction.com", "/"));
-		assertEquals("http://iddiction.com/test", UrlUtils.getFullUrl("http://iddiction.com", "test"));
-		assertEquals("http://iddiction.com/test", UrlUtils.getFullUrl("http://iddiction.com", "/test"));
+		assertEquals("http://spiekeify.com/", UrlUtils.getFullUrl("http://spiekeify.com", "/"));
+		assertEquals("http://spiekeify.com/test", UrlUtils.getFullUrl("http://spiekeify.com", "test"));
+		assertEquals("http://spiekeify.com/test", UrlUtils.getFullUrl("http://spiekeify.com", "/test"));
 
-		assertEquals("http://iddiction.com/", UrlUtils.getFullUrl("http://iddiction.com/", "/"));
-		assertEquals("http://iddiction.com/test", UrlUtils.getFullUrl("http://iddiction.com/", "test"));
-		assertEquals("http://iddiction.com/test", UrlUtils.getFullUrl("http://iddiction.com/", "/test"));
+		assertEquals("http://spiekeify.com/", UrlUtils.getFullUrl("http://spiekeify.com/", "/"));
+		assertEquals("http://spiekeify.com/test", UrlUtils.getFullUrl("http://spiekeify.com/", "test"));
+		assertEquals("http://spiekeify.com/test", UrlUtils.getFullUrl("http://spiekeify.com/", "/test"));
 	}
 
 	@Test
 	public void testGetFullUrl_2()
 	{
-		assertEquals("http://iddiction.com", UrlUtils.getFullUrl("http://iddiction.com", "http://iddiction.com"));
-		assertEquals("http://iddiction.com", UrlUtils.getFullUrl("http://iddiction.com/", "http://iddiction.com"));
+		assertEquals("http://spiekeify.com", UrlUtils.getFullUrl("http://spiekeify.com", "http://spiekeify.com"));
+		assertEquals("http://spiekeify.com", UrlUtils.getFullUrl("http://spiekeify.com/", "http://spiekeify.com"));
 
-		assertEquals("http://iddiction.com/test.html", UrlUtils.getFullUrl("http://iddiction.com", "http://iddiction.com/test.html"));
-		assertEquals("http://iddiction.com/test/test.html", UrlUtils.getFullUrl("http://iddiction.com", "http://iddiction.com/test/test.html"));
+		assertEquals("http://spiekeify.com/test.html", UrlUtils.getFullUrl("http://spiekeify.com", "http://spiekeify.com/test.html"));
+		assertEquals("http://spiekeify.com/test/test.html", UrlUtils.getFullUrl("http://spiekeify.com", "http://spiekeify.com/test/test.html"));
 	}
 }

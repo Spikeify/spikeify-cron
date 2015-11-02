@@ -13,8 +13,6 @@ public class CronJobTest {
 	public void createJobTest() {
 
 		CronJob job = new CronJob("bla");
-
-//		assertNotNull(job.getId());
 		assertEquals("bla", job.getName());
 
 		assertNull(job.getFirstRun());
@@ -167,8 +165,6 @@ public class CronJobTest {
 	@Test
 	public void getDescriptionTest() {
 		CronJob job = new CronJob("bla");
-
-		//		assertNotNull(job.getId());
 		assertEquals("bla", job.getName());
 
 		// 2.
