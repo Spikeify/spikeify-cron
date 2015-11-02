@@ -3,6 +3,7 @@ package com.spikeify.cron.data.json;
 import com.spikeify.cron.NotNullAndIgnoreUnknowns;
 import com.spikeify.cron.entities.CronJob;
 import com.spikeify.cron.entities.enums.RunEvery;
+import com.spikeify.cron.utils.Assert;
 
 /**
  * For REST usage
@@ -40,6 +41,9 @@ public class CronJobJSON {
 	}
 
 	public CronJobJSON(CronJob job, int timeZone) {
+
+		Assert.notNull(job, "Missing job!");
+
 		id = job.getId();
 		name = job.getName();
 

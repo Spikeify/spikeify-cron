@@ -214,7 +214,7 @@ public class CronServiceImplTest {
 
 		CronJob changed = service.update(job, new ScheduleUpdater("http://localhost", 5, RunEvery.minute));
 
-		// reimport from same file
+		// re-import from same file
 		service.importJobs("/dummy.json", true, 0);
 
 		CronJob compare = manager.findByName("one");

@@ -9,5 +9,5 @@ public enum RunEvery {
 	minute, // will run every X minutes (according to runEvery)
 	hour,	// will run every X hours (according to runEvery)
 	day,	// will run every X days (according to runEvery)
-	week
+	week    // will run every X weeks (according to runEvery)
 }

@@ -43,7 +43,7 @@ public class ScheduleUpdater implements CronJobUpdater {
 						   int timezone) {
 
 		if (timezone < -11 || timezone > 12) {
-			throw new IllegalArgumentException("Expected time zone > -12 and <= 12!");
+			throw new IllegalArgumentException("Expected time zone >= -11 and <= 12!");
 		}
 
 		runFromTo = true;

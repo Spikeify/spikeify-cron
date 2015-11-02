@@ -2,6 +2,7 @@ package com.spikeify.cron.data;
 
 import com.spikeify.cron.data.json.CronJobJSON;
 import com.spikeify.cron.entities.CronJob;
+import com.spikeify.cron.utils.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ public class CronJsonUpdater implements CronJobUpdater {
 	private final int timeZone;
 
 	public CronJsonUpdater(CronJobJSON json, int localTimeZone) {
+
+		Assert.notNull(json, "Missing job JSON");
 
 		data = json;
 		timeZone = localTimeZone;
