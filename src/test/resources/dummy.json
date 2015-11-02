@@ -1,0 +1,29 @@
+[
+  {
+    "disabled": false,
+    "name": "one",
+    "target": "http://localhost/",
+    "interval": 5,
+    "intervalUnits": "minute",
+    "startHour": 10,
+    "startMinute": 30,
+    "endHour": 11,
+    "endMinute": 45
+  },
+  {
+    "disabled": true,
+    "name": "two",
+    "target": "http://localhost/",
+    "interval": 1,
+    "intervalUnits": "day",
+    "startHour": 10,
+    "startMinute": 30
+  },
+  {
+    "disabled": false,
+    "name": "three",
+    "target": "http://localhost/",
+    "interval": 1,
+    "intervalUnits": "hour"
+  }
+]

@@ -1,2 +1,2 @@
 # spikeify-cron
-A Cron built on top of spikeify
+A Cron built on top of Spikeify
