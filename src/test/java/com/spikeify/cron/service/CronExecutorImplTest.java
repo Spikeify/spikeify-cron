@@ -1,14 +1,12 @@
 package com.spikeify.cron.service;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.spikeify.Spikeify;
 import com.spikeify.cron.TestHelper;
 import com.spikeify.cron.data.CronExecutorResult;
 import com.spikeify.cron.data.ScheduleUpdater;
 import com.spikeify.cron.entities.CronJob;
 import com.spikeify.cron.entities.enums.CronJobResult;
 import com.spikeify.cron.entities.enums.RunEvery;
-import com.spikeify.Spikeify;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,27 +17,28 @@ import static org.junit.Assert.assertNotNull;
 
 public class CronExecutorImplTest {
 
-	@Inject
-	Provider<Spikeify> sfy;
-
-	@Inject
+	Spikeify sfy;
 	CronManager manager;
-
-	@Inject
 	CronExecutor executor;
+	CronService service;
 
 	@Before
 	public void setUp() {
 
-		TestHelper.inject(this);
-		sfy.get().truncateNamespace(sfy.get().getNamespace());
+		sfy = TestHelper.getSpikeify();
+		sfy.truncateNamespace(sfy.getNamespace());
+
+		manager = new CronManagerImpl(sfy);
+		executor = new CronExecutorImpl();
+		service = new CronServiceImpl(manager, executor);
 	}
 
 	@After
 	public void tearDown() {
 
-		sfy.get().truncateNamespace(sfy.get().getNamespace());
+		sfy.truncateNamespace(sfy.getNamespace());
 	}
+
 	@Test
 	public void testRun() throws Exception {
 

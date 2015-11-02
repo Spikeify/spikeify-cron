@@ -1,16 +1,21 @@
 package com.spikeify.cron;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.spikeify.cron.guice.CronJobModule;
+import com.aerospike.client.Host;
+import com.spikeify.Spikeify;
+import com.spikeify.SpikeifyService;
 
 public class TestHelper {
 
-	public static Injector inject(Object clazz) {
+	private static final Host host = new Host("127.0.0.1", 3000);
+	private static final String namespace = "test";
 
-		Injector injector = Guice.createInjector(new CronJobModule(),
-												 new TestProvidersModule());
-		injector.injectMembers(clazz);
-		return injector;
+	public static Spikeify getSpikeify() {
+
+		if (SpikeifyService.getClient() == null) {
+
+			SpikeifyService.globalConfig(namespace, host);
+		}
+
+		return SpikeifyService.sfy();
 	}
 }

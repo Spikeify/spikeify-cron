@@ -1,8 +1,6 @@
 package com.spikeify.cron.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import com.spikeify.cron.data.CronExecutorResult;
 import com.spikeify.cron.data.CronJobUpdater;
 import com.spikeify.cron.data.LastRunUpdater;
@@ -12,16 +10,14 @@ import com.spikeify.cron.exceptions.CronJobException;
 import com.spikeify.cron.utils.Assert;
 import com.spikeify.cron.utils.JsonUtils;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Singleton
 public class CronServiceImpl implements CronService {
 
 	private static final Logger log = Logger.getLogger(CronServiceImpl.class.getSimpleName());
@@ -29,7 +25,6 @@ public class CronServiceImpl implements CronService {
 	private final CronManager manager;
 	private final CronExecutor executor;
 
-	@Inject
 	public CronServiceImpl(CronManager cronManager,
 						   CronExecutor cronExecutor) {
 
@@ -125,11 +120,17 @@ public class CronServiceImpl implements CronService {
 	public void importJobs(String resource, boolean checkTimestamp, int timeZone) throws CronJobException {
 
 		try {
-			URL url = Resources.getResource(resource);
-			String json = Resources.toString(url, Charsets.UTF_8);
+			InputStream stream = getClass().getResourceAsStream(resource);
+
+			if (stream == null) {
+				throw new CronJobException("Missing resource: '" + resource + "'");
+			}
+			java.util.Scanner s = new java.util.Scanner(stream).useDelimiter("\\A");
+			String json = s.hasNext() ? s.next() : "";
 
 			long lastModified = 0;
 			if (checkTimestamp) {
+				URL url = getClass().getResource(resource);
 				lastModified = url.openConnection().getLastModified(); // get last modified date of resource
 			}
 

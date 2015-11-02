@@ -1,7 +1,5 @@
 package com.spikeify.cron.service;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.spikeify.cron.TestHelper;
 import com.spikeify.cron.data.CronExecutorResult;
 import com.spikeify.cron.data.ScheduleUpdater;
@@ -24,26 +22,26 @@ public class CronServiceImplTest {
 
 	private static final long ONE_WEEK = 7L * 24L * 60L * 60L * 1000L;
 
-	@Inject
-	Provider<Spikeify> sfy;
-
-	@Inject
-	CronService service;
-
-	@Inject
+	Spikeify sfy;
 	CronManager manager;
+	CronExecutor executor;
+	CronService service;
 
 	@Before
 	public void setUp() {
 
-		TestHelper.inject(this);
-		sfy.get().truncateNamespace(sfy.get().getNamespace());
+		sfy = TestHelper.getSpikeify();
+		sfy.truncateNamespace(sfy.getNamespace());
+
+		manager = new CronManagerImpl(sfy);
+		executor = new CronExecutorImpl();
+		service = new CronServiceImpl(manager, executor);
 	}
 
 	@After
 	public void tearDown() {
 
-		sfy.get().truncateNamespace(sfy.get().getNamespace());
+		sfy.truncateNamespace(sfy.getNamespace());
 	}
 
 	@Test
@@ -159,7 +157,7 @@ public class CronServiceImplTest {
 	@Test
 	public void importFromResourceTest() throws CronJobException {
 
-		service.importJobs("dummy.json", false, 0);
+		service.importJobs("/dummy.json", false, 0);
 
 		List<CronJob> list = service.list();
 		assertEquals(3, list.size());
@@ -217,7 +215,7 @@ public class CronServiceImplTest {
 		CronJob changed = service.update(job, new ScheduleUpdater("http://localhost", 5, RunEvery.minute));
 
 		// reimport from same file
-		service.importJobs("dummy.json", true, 0);
+		service.importJobs("/dummy.json", true, 0);
 
 		CronJob compare = manager.findByName("one");
 		assertFalse(job.isDisabled());

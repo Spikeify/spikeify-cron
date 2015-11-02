@@ -1,7 +1,5 @@
 package com.spikeify.cron.service;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.spikeify.cron.data.CronExecutorResult;
 import com.spikeify.cron.entities.CronJob;
 import com.spikeify.cron.entities.enums.CronJobResult;
@@ -15,12 +13,10 @@ import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Singleton
 public class CronExecutorImpl implements CronExecutor {
 
 	private static final Logger log = Logger.getLogger(CronExecutorImpl.class.getSimpleName());
 
-	@Inject
 	public CronExecutorImpl() {
 
 	}

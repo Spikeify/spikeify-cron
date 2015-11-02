@@ -10,8 +10,8 @@
     <packaging>jar</packaging>
 
     <name>Spikeify Cron Library</name>
-    <description>Cron service utilizing Spikeify with Aerospike database</description>
-    <url>https://github.com/Spikeify/spikeify-taskqueue</url>
+    <description>Simple cron job service utilizing Spikeify with Aerospike database</description>
+    <url>https://github.com/Spikeify/spikeify-cron</url>
     <inceptionYear>2015</inceptionYear>
 
     <properties>
@@ -58,11 +58,11 @@
     <dependencies>
 
         <!-- Dependency injection Guice -->
-        <dependency>
+       <!-- <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>${version.guice}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- Spiekeify -->
         <dependency>

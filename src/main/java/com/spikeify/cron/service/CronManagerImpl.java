@@ -11,21 +11,17 @@ import com.spikeify.cron.exceptions.CronJobException;
 import com.spikeify.cron.utils.Assert;
 import com.spikeify.cron.utils.StringUtils;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Singleton
 public class CronManagerImpl implements CronManager {
 
 	private static final Logger log = Logger.getLogger(CronManagerImpl.class.getSimpleName());
 
 	private final Spikeify sfy;
 
-	@Inject
 	public CronManagerImpl(Spikeify spikeify) {
 
 		Assert.notNull(spikeify, "Missing spikeify!");
