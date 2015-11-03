@@ -80,11 +80,11 @@ public class CronJob {
 
 	/**
 	 * Time job should run next
-	 * if nextRun <= current time
-	 * <p>
-	 * is calculated when job is run ...
-	 * to be available on next run
-	 * <p>
+	 * if nextRun is lower than current time
+	 *
+	 * - is calculated when job is run ...
+	 * - to be available on next run
+	 *
 	 * -1 - default / disabled ... until interval is set
 	 */
 	@Indexed

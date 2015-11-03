@@ -18,6 +18,7 @@ public interface CronService {
 	 *
 	 * @param name cron job name
 	 * @return created cron job
+	 * @throws CronJobException in case of invalid data
 	 */
 	CronJob create(String name) throws CronJobException;
 
@@ -27,6 +28,7 @@ public interface CronService {
 	 * @param original to update
 	 * @param updater  performing update on original
 	 * @return updated cron job
+	 * @throws CronJobException in case of invalid data
 	 */
 	CronJob update(CronJob original, CronJobUpdater updater) throws CronJobException;
 
