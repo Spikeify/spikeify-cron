@@ -17,6 +17,7 @@ public interface CronManager {
 	 *
 	 * @param name of cron job
 	 * @return created job
+	 * @throws CronJobException in case of invalid data
 	 */
 	CronJob create(String name) throws CronJobException;
 
@@ -26,6 +27,7 @@ public interface CronManager {
 	 * @param job     to be updated
 	 * @param updater class updating job
 	 * @return updated job
+	 * @throws CronJobException in case of invalid data
 	 */
 	CronJob update(CronJob job, CronJobUpdater updater) throws CronJobException;
 
@@ -76,6 +78,7 @@ public interface CronManager {
 	 * @param job          to be imported
 	 * @param lastModified time stamp of latest change, 0 to ignore (if job.lastModified is older than given time stamp job is imported)
 	 * @param timeZone local time zone (to recalculate stored time to UTC)
+	 * @throws CronJobException in case of invalid data
 	 */
 	void importJob(CronJobJSON job, long lastModified, int timeZone) throws CronJobException;
 }

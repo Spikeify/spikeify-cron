@@ -16,6 +16,7 @@ public interface CronService {
 	/**
 	 * Creates new cron job
 	 *
+	 * @param name cron job name
 	 * @return created cron job
 	 */
 	CronJob create(String name) throws CronJobException;
@@ -45,12 +46,17 @@ public interface CronService {
 	 */
 	List<CronJob> list();
 
+	/**
+	 * deletes given cron job
+	 * @param job with id
+	 */
 	void delete(CronJob job);
 
 	/**
 	 * Finds tasks to be executed (run) on given moment and triggers them
 	 *
 	 * @return number of jobs run
+	 * @throws CronJobException in case of invalid data
 	 */
 	int run(String rootUrl) throws CronJobException;
 
@@ -74,7 +80,8 @@ public interface CronService {
 	 * Imports cron jobs from external
 	 *
 	 * @param data     to be imported
-	 * @param timeZone local time zone
+	 * @param timeZone local time zone to take into account when setting UTC time
+	 * @throws CronJobException in case of invalid data
 	 */
 	void importJobs(List<CronJobJSON> data, int timeZone) throws CronJobException;
 
@@ -83,8 +90,8 @@ public interface CronService {
 	 *
 	 * @param resource       to load jobs from
 	 * @param checkTimestamp true check if given resource has changed and is newer that the state in the database, false overwrite
-	 * @param timeZone       local time zone
-	 * @throws CronJobException
+	 * @param timeZone       local time zone to take into account when setting UTC timeC
+	 * @throws CronJobException in case of invalid data
 	 */
 	void importJobs(String resource, boolean checkTimestamp, int timeZone) throws CronJobException;
 }

@@ -21,11 +21,6 @@ import java.util.logging.Logger;
 
 /**
  * Entity in database holding information about cron task
- * <p>
- * <target>push-vm</target>
- * <url>/rest/push/v1/feedback</url>
- * <description>Call APNS feedback service to clean out inactive push tokens</description>
- * <schedule>every 1 hours synchronized</schedule>
  */
 public class CronJob {
 
@@ -579,6 +574,7 @@ public class CronJob {
 
 	/**
 	 * needed for time simulation in unit tests
+	 * @return current system time (for test mocking purposes only)
 	 */
 	protected long getTime() {
 
