@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class CronServiceImpl implements CronService {
@@ -121,11 +122,11 @@ public class CronServiceImpl implements CronService {
 
 		try {
 			InputStream stream = getClass().getResourceAsStream(resource);
-
 			if (stream == null) {
-				throw new CronJobException("Missing resource: '" + resource + "'");
+				throw new CronJobException("Missing resource: '" + resource + "'", HttpURLConnection.HTTP_BAD_REQUEST);
 			}
-			java.util.Scanner s = new java.util.Scanner(stream).useDelimiter("\\A");
+
+			Scanner s = new Scanner(stream).useDelimiter("\\A");
 			String json = s.hasNext() ? s.next() : "";
 
 			long lastModified = 0;
