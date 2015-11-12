@@ -54,13 +54,13 @@ public class CronJobJSON {
 		firstRun = job.getFirstRun();
 
 		if (!disabled) {
-			nextRun = job.getNextRun();
+			nextRun = job.getNextRun(timeZone);
 		}
 		else {
 			nextRun = null;
 		}
 
-		lastRun = job.getLastRun();
+		lastRun = job.getLastRun(timeZone);
 
 		startHour = job.getRunFromHour(timeZone);
 		startMinute = job.getRunFromMinute();
