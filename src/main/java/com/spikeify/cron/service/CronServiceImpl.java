@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 public class CronServiceImpl implements CronService {
 
 	private static final Logger log = Logger.getLogger(CronServiceImpl.class.getSimpleName());
+	private static final long DELTA = 10 * 1000L; // 10 seconds
 
 	private final CronManager manager;
 	private final CronExecutor executor;
@@ -71,11 +72,17 @@ public class CronServiceImpl implements CronService {
 		for (CronJob job : list) {
 
 			try {
+				// remember time job was started
+				long startTime = job.getNextRun(); // take next run as start time if not smaller than 10s from current time
+				if (startTime <= System.currentTimeMillis() - DELTA) {
+					startTime = System.currentTimeMillis();
+				}
+
 				// execute
 				CronExecutorResult result = executor.run(job, rootUrl);
 
 				// set last run result and calculate next execution and store changes to database
-				manager.update(job, new LastRunUpdater(System.currentTimeMillis(), result.getJobResult(), result.getMessage()));
+				manager.update(job, new LastRunUpdater(startTime, result.getJobResult(), result.getMessage()));
 				count ++;
 			}
 			catch (CronJobException e) {
