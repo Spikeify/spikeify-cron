@@ -207,6 +207,14 @@ public class CronJob {
 		return lastRun;
 	}
 
+	public Long getLastRun(int timezone) {
+		if (lastRun == null) {
+			return null;
+		}
+
+		return DateTimeUtils.getTimezoneTime(lastRun, timezone);
+	}
+
 	public CronJobResult getLastResult() {
 
 		return lastResult;
@@ -220,6 +228,15 @@ public class CronJob {
 	public long getNextRun() {
 
 		return nextRun;
+	}
+
+	public long getNextRun(int timeZone) {
+
+		if (isDisabled()) {
+			return nextRun;
+		}
+
+		return DateTimeUtils.getTimezoneTime(nextRun, timeZone);
 	}
 
 	public int getInterval() {

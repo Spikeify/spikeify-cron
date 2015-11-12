@@ -191,8 +191,12 @@ public class CronJobTest {
 		// 5.
 		job.setTarget("http://some.url/target");
 		assertEquals("first run: 2035-10-12 06:59, runs every 3rd hour, from: 02:10, until: 05:25, target: http://some.url/target, next run: 2035-10-13 02:10", job.getDescription(true, 0));
+
 		assertEquals("first run: 2035-10-11 19:59, runs every 3rd hour, from: 15:10, until: 18:25, target: http://some.url/target, next run: 2035-10-12 15:10", job.getDescription(true, -11));
 		assertEquals("first run: 2035-10-12 18:59, runs every 3rd hour, from: 14:10, until: 17:25, target: http://some.url/target, next run: 2035-10-13 14:10", job.getDescription(true, 12));
+		assertEquals(2075854256000L, job.getNextRun()); //  Sat, 13 Oct 2035 02:10:56 GMT
+		assertEquals(2075897456000L, job.getNextRun(12)); //  Sat, 13 Oct 2035 14:10:56 GMT
+		assertEquals(2075814656000L, job.getNextRun(-11)); //  Fri, 12 Oct 2035 15:10:56 GMT
 
 
 		// 6.

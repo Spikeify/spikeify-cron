@@ -90,6 +90,21 @@ public final class DateTimeUtils {
 		return hour;
 	}
 
+	public static long getTimezoneTime(long time, int timezone) {
+
+		Calendar calendar = getCalendar(time);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+		hour = (hour + timezone) % 24;
+		if (hour < 0) {
+			hour = 24 + hour;
+			calendar.add(Calendar.DAY_OF_MONTH, -1);
+		}
+
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		return calendar.getTimeInMillis();
+	}
+
 	/**
 	 * Converts local hour back to UTC hour
 	 * @param hour local hour in time zone
