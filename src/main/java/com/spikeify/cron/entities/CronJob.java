@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 /**
  * Entity in database holding information about cron task
  */
-@NotNullAndIgnoreUnknowns
 public class CronJob {
 
 	private static final Logger log = Logger.getLogger(CronJob.class.getSimpleName());
