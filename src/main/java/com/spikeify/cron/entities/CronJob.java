@@ -3,6 +3,7 @@ package com.spikeify.cron.entities;
 import com.spikeify.annotations.Generation;
 import com.spikeify.annotations.Indexed;
 import com.spikeify.annotations.UserKey;
+import com.spikeify.cron.NotNullAndIgnoreUnknowns;
 import com.spikeify.cron.entities.enums.CronJobResult;
 import com.spikeify.cron.entities.enums.RunEvery;
 import com.spikeify.cron.utils.Assert;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 /**
  * Entity in database holding information about cron task
  */
+@NotNullAndIgnoreUnknowns
 public class CronJob {
 
 	private static final Logger log = Logger.getLogger(CronJob.class.getSimpleName());
