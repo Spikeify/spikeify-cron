@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.spikeify</groupId>
     <artifactId>cron</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>Spikeify Cron Library</name>
@@ -19,8 +19,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <version.aerospike>3.1.4</version.aerospike>
-        <version.spikeify>[0.2.12, 0.3)</version.spikeify>
+        <version.aerospike>3.1.6</version.aerospike>
+        <version.spikeify>[0.2.15, 0.3)</version.spikeify>
 
         <version.junit>4.12</version.junit>
         <version.mockito-all>1.10.8</version.mockito-all>
