@@ -77,19 +77,19 @@ public class CronServiceImplTest {
 		assertEquals(0, list.size());
 
 		// no job should run ...
-		int count = service.run((String)null);
+		int count = service.run();
 		assertEquals(0, count);
 
 		CronJob job = service.create("Bla");
-		count = service.run((String)null);
+		count = service.run();
 		assertEquals(0, count);
 
 		service.update(job, new ScheduleUpdater("http://localhost/", 1, RunEvery.week));
-		count = service.run((String)null);
+		count = service.run();
 		assertEquals(1, count);
 
 		// make sure job is not run again
-		count = service.run((String)null);
+		count = service.run();
 		assertEquals(0, count);
 
 		// get job next run

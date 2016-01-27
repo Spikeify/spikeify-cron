@@ -74,7 +74,7 @@ public class CronServiceImpl implements CronService {
 	}
 
 	@Override
-	public int run(String rootUrl) {
+	public int run() {
 
 		List<CronJob> list = manager.list(System.currentTimeMillis());
 

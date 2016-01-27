@@ -60,7 +60,7 @@ public interface CronService {
 	 * @return number of jobs run
 	 * @throws CronJobException in case of invalid data
 	 */
-	int run(String rootUrl) throws CronJobException;
+	int run() throws CronJobException;
 
 	/**
 	 * Test runs given cron job
