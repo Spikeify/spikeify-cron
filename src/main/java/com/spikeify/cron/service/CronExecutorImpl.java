@@ -22,7 +22,7 @@ public class CronExecutorImpl implements CronExecutor {
 	}
 
 	@Override
-	public CronExecutorResult run(CronJob job, String rootUrl) {
+	public CronExecutorResult run(CronJob job, CronSettings settings) {
 
 		Assert.notNull(job, "Missing job to run!");
 
@@ -32,20 +32,14 @@ public class CronExecutorImpl implements CronExecutor {
 		}
 
 		// if job can run, then target is set ... no need to check twice
-		String target = job.getTarget(rootUrl);
+		String target = job.getTarget(settings.getRootUrl());
 		log.info("Running: " + job);
 
-		return execute(target);
+		return execute(target, settings);
 	}
 
 	@Override
-	public CronExecutorResult execute(String target) {
-
-		return execute(target, null, null);
-	}
-
-	@Override
-	public CronExecutorResult execute(String target, String cronUser, String cronPassword) {
+	public CronExecutorResult execute(String target, CronSettings settings) {
 
 		try {
 			if (StringUtils.isNullOrEmptyTrimmed(target)) {
@@ -59,8 +53,9 @@ public class CronExecutorImpl implements CronExecutor {
 			connection.setRequestProperty("Content-Type", "application/json");
 
 			// simple basic auth if needed
-			if (!StringUtils.isNullOrEmptyTrimmed(cronUser)) {
-				String userCredentials = cronUser + ":" + cronPassword;
+			if (!StringUtils.isNullOrEmptyTrimmed(settings.getCronUser())) {
+
+				String userCredentials = settings.getCronUser() + ":" + settings.getCronPassword();
 				String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userCredentials.getBytes(Charset.forName("UTF-8"))));
 				connection.setRequestProperty("Authorization", basicAuth);
 			}

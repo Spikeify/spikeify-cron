@@ -9,6 +9,11 @@ public class DefaultCronService extends CronServiceImpl {
 
 	public DefaultCronService(Spikeify spikeify) {
 
-		super(new CronManagerImpl(spikeify), new CronExecutorImpl());
+		super(new CronManagerImpl(spikeify), new CronExecutorImpl(), null);
+	}
+
+	public DefaultCronService(Spikeify spikeify, CronSettings cronSettings) {
+
+		super(new CronManagerImpl(spikeify), new CronExecutorImpl(), cronSettings);
 	}
 }

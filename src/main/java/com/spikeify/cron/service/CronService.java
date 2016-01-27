@@ -68,7 +68,7 @@ public interface CronService {
 	 * @param job to be run
 	 * @return result of run
 	 */
-	CronExecutorResult run(CronJob job, String rootUrl);
+	CronExecutorResult run(CronJob job);
 
 	/**
 	 * Exports all configured jobs as JSON

@@ -30,7 +30,7 @@ public class CronExecutorImplTest {
 
 		manager = new CronManagerImpl(sfy);
 		executor = new CronExecutorImpl();
-		service = new CronServiceImpl(manager, executor);
+		service = new CronServiceImpl(manager, executor, null);
 	}
 
 	@After
@@ -43,6 +43,7 @@ public class CronExecutorImplTest {
 	public void testRun() throws Exception {
 
 		CronJob job = manager.create("job");
+
 		// 1.
 		CronExecutorResult result = executor.run(job, null);
 		assertNotNull(result);
@@ -52,7 +53,7 @@ public class CronExecutorImplTest {
 		// 2.
 		job = manager.update(job, new ScheduleUpdater("http://localhost:8080/", 1, RunEvery.minute));
 
-		result = executor.run(job, null);
+		result = executor.run(job, new DefaultCronSettings(null));
 		assertNotNull(result);
 		Assert.assertEquals(CronJobResult.fail, result.getJobResult());
 		assertEquals("Connection refused", result.getMessage());

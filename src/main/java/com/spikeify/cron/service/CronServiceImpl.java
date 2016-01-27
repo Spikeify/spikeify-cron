@@ -26,12 +26,22 @@ public class CronServiceImpl implements CronService {
 
 	private final CronManager manager;
 	private final CronExecutor executor;
+	private final CronSettings settings;
 
 	public CronServiceImpl(CronManager cronManager,
-						   CronExecutor cronExecutor) {
+						   CronExecutor cronExecutor,
+	                       CronSettings cronSetting) {
 
 		manager = cronManager;
 		executor = cronExecutor;
+
+		// make sure settings are present ... event if empty
+		if (cronSetting == null) {
+			settings = new DefaultCronSettings(null);
+		}
+		else {
+			settings = cronSetting;
+		}
 	}
 
 	@Override
@@ -79,7 +89,7 @@ public class CronServiceImpl implements CronService {
 				}
 
 				// execute
-				CronExecutorResult result = executor.run(job, rootUrl);
+				CronExecutorResult result = executor.run(job, settings);
 
 				// set last run result and calculate next execution and store changes to database
 				manager.update(job, new LastRunUpdater(startTime, result.getJobResult(), result.getMessage()));
@@ -95,10 +105,10 @@ public class CronServiceImpl implements CronService {
 	}
 
 	@Override
-	public CronExecutorResult run(CronJob job, String rootUrl) {
+	public CronExecutorResult run(CronJob job) {
 
-		String target = job.getTarget(rootUrl);
-		return executor.execute(target);
+		String target = job.getTarget(settings.getRootUrl());
+		return executor.execute(target, settings);
 	}
 
 	@Override

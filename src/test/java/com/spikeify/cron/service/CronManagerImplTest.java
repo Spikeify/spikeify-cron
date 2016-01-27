@@ -35,7 +35,7 @@ public class CronManagerImplTest {
 
 		manager = new CronManagerImpl(sfy);
 		executor = new CronExecutorImpl();
-		service = new CronServiceImpl(manager, executor);
+		service = new CronServiceImpl(manager, executor, new DefaultCronSettings("http://some/"));
 	}
 
 	@After

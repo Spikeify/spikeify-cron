@@ -12,26 +12,17 @@ public interface CronExecutor {
 	 * Runs cron job
 	 *
 	 * @param job     to be run
-	 * @param rootUrl root url to prefix on target (if needed)
+	 * @param setting settings to support running / root url ...
 	 * @return result of cron job
 	 */
-	CronExecutorResult run(CronJob job, String rootUrl);
-
-	/**
-	 * Calls target url
-	 *
-	 * @param target to invoke
-	 * @return result of cron job
-	 */
-	CronExecutorResult execute(String target);
+	CronExecutorResult run(CronJob job, CronSettings setting);
 
 	/**
 	 * Calls target url with basic auth info in header using user and password
 	 *
 	 * @param target       to invoke
-	 * @param cronUser     basic auth user
-	 * @param cronPassword basic auth password
+	 * @param settings     for basic auth if any
 	 * @return result of cron job
 	 */
-	CronExecutorResult execute(String target, String cronUser, String cronPassword);
+	CronExecutorResult execute(String target, CronSettings settings);
 }

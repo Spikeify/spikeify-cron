@@ -35,7 +35,7 @@ public class CronServiceImplTest {
 
 		manager = new CronManagerImpl(sfy);
 		executor = new CronExecutorImpl();
-		service = new CronServiceImpl(manager, executor);
+		service = new CronServiceImpl(manager, executor, null);
 	}
 
 	@After
@@ -77,19 +77,19 @@ public class CronServiceImplTest {
 		assertEquals(0, list.size());
 
 		// no job should run ...
-		int count = service.run(null);
+		int count = service.run((String)null);
 		assertEquals(0, count);
 
 		CronJob job = service.create("Bla");
-		count = service.run(null);
+		count = service.run((String)null);
 		assertEquals(0, count);
 
 		service.update(job, new ScheduleUpdater("http://localhost/", 1, RunEvery.week));
-		count = service.run(null);
+		count = service.run((String)null);
 		assertEquals(1, count);
 
 		// make sure job is not run again
-		count = service.run(null);
+		count = service.run((String)null);
 		assertEquals(0, count);
 
 		// get job next run
@@ -102,7 +102,7 @@ public class CronServiceImplTest {
 	public void testRunSingleJob() throws Exception {
 
 		CronJob job = service.create("Bla");
-		CronExecutorResult result = service.run(job, null);
+		CronExecutorResult result = service.run(job);
 		Assert.assertEquals(CronJobResult.fail, result.getJobResult());
 		assertEquals("No URL given, can't run!", result.getMessage());
 	}
