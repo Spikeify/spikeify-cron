@@ -243,9 +243,11 @@ public class CronServiceImplTest {
 		jobs.add(new CronJobJSON(new DummyCronJob("three")));
 		service.importJobs(jobs, 0);
 
+		int[] count = new int[WORKERS];
 
 		for (int i = 0; i < WORKERS; i++) {
 
+			final int index = i;
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
@@ -254,7 +256,7 @@ public class CronServiceImplTest {
 					CronExecutor executor = new SlowCronExecutor();
 
 					CronServiceImpl service = new CronServiceImpl(manager, executor, null);
-					service.run();
+					count[index] = service.run();
 				}
 			};
 
@@ -268,8 +270,11 @@ public class CronServiceImplTest {
 			threads[i].join();
 		}
 
-		// check all cron job should be stated only once
-		List<CronJob> list = service.list();
+		int total = 0;
+		for (int i = 0; i < WORKERS; i++) {
+			total = total + count[i];
+		}
 
+		assertEquals(3, total);
 	}
 }
