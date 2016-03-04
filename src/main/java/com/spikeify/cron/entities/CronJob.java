@@ -3,13 +3,14 @@ package com.spikeify.cron.entities;
 import com.spikeify.annotations.Generation;
 import com.spikeify.annotations.Indexed;
 import com.spikeify.annotations.UserKey;
-import com.spikeify.cron.NotNullAndIgnoreUnknowns;
 import com.spikeify.cron.entities.enums.CronJobResult;
 import com.spikeify.cron.entities.enums.RunEvery;
 import com.spikeify.cron.utils.Assert;
 import com.spikeify.cron.utils.DateTimeUtils;
 import com.spikeify.cron.utils.StringUtils;
 import com.spikeify.cron.utils.UrlUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,19 +18,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Entity in database holding information about cron task
  */
 public class CronJob {
 
-	private static final Logger log = Logger.getLogger(CronJob.class.getSimpleName());
+	private static final Logger log = LoggerFactory.getLogger(CronJob.class);
+
 	private static final long ONE_DAY_IN_MILLISECONDS = 24L * 60L * 60L * 1000L;
 
 	// simple measure to ease filtering out enabled and disabled jobs until they are run for the first time
 	private static final long RUN_DISABLED = -1L;
+
 	private static final long RUN_ENABLED = 1L;
 
 	/**
@@ -87,10 +88,8 @@ public class CronJob {
 	/**
 	 * Time job should run next
 	 * if nextRun is lower than current time
-	 *
 	 * - is calculated when job is run ...
 	 * - to be available on next run
-	 *
 	 * -1 - default / disabled ... until interval is set
 	 */
 	@Indexed
@@ -116,6 +115,7 @@ public class CronJob {
 	 * run from hour/minute in current day, null - don't care
 	 */
 	protected Integer runFromHour;
+
 	protected Integer runFromMinute;
 
 	/**
@@ -123,6 +123,7 @@ public class CronJob {
 	 * run to can be lower than run from to enable running for instance from: 23:20 until: 1:20
 	 */
 	protected Integer runToHour;
+
 	protected Integer runToMinute;
 
 	protected CronJob() {
@@ -150,7 +151,7 @@ public class CronJob {
 			calculateNextRun();
 		}
 		catch (URISyntaxException e) {
-			log.log(Level.SEVERE, "Invalid target URI: " + newTarget, e);
+			log.error("Invalid target URI: " + newTarget, e);
 			throw new IllegalArgumentException("Invalid target URI: " + newTarget);
 		}
 	}
@@ -219,6 +220,7 @@ public class CronJob {
 	}
 
 	public Long getLastRun(int timezone) {
+
 		if (lastRun == null) {
 			return null;
 		}
@@ -489,7 +491,8 @@ public class CronJob {
 
 		if (isDisabled()) {
 			builder.append(", next run: disabled");
-		} else if (nextRun >= getTime()) {
+		}
+		else if (nextRun >= getTime()) {
 			builder.append(", next run: ").append(formatDateTime(nextRun, timeZone));
 		}
 
@@ -618,6 +621,7 @@ public class CronJob {
 
 	/**
 	 * needed for time simulation in unit tests
+	 *
 	 * @return current system time (for test mocking purposes only)
 	 */
 	protected long getTime() {
@@ -628,7 +632,7 @@ public class CronJob {
 	public boolean isOlder(long timeStamp) {
 
 		return timeStamp == 0 ||
-			   lastModified <= timeStamp;
+			lastModified <= timeStamp;
 	}
 
 	private long getNextRunFor(RunEvery interval, long intervalUnits, long start) {
@@ -671,24 +675,23 @@ public class CronJob {
 	@Override
 	public boolean equals(Object o) {
 
-		if (o == this)
-			return true;
+		if (o == this) { return true; }
 
-		if (!(o instanceof CronJob))
-			return false;
+		if (!(o instanceof CronJob)) { return false; }
 
-		CronJob compare = (CronJob)o;
+		CronJob compare = (CronJob) o;
 		return StringUtils.equals(compare.name, name) &&
-			   StringUtils.equals(compare.target, target) &&
-			   Objects.equals(compare.firstRun, firstRun) &&
-			   Objects.equals(compare.runFromHour, runFromHour) &&
-			   Objects.equals(compare.runFromMinute, runFromMinute) &&
-			   Objects.equals(compare.runToHour, runToHour) &&
-			   Objects.equals(compare.runToMinute, runToMinute);
+			StringUtils.equals(compare.target, target) &&
+			Objects.equals(compare.firstRun, firstRun) &&
+			Objects.equals(compare.runFromHour, runFromHour) &&
+			Objects.equals(compare.runFromMinute, runFromMinute) &&
+			Objects.equals(compare.runToHour, runToHour) &&
+			Objects.equals(compare.runToMinute, runToMinute);
 	}
 
 	@Override
 	public int hashCode() {
+
 		return getDescription(true, 0).hashCode();
 	}
 }

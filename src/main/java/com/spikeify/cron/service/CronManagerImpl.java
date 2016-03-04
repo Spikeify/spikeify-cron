@@ -13,12 +13,12 @@ import com.spikeify.cron.utils.StringUtils;
 
 import java.net.HttpURLConnection;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CronManagerImpl implements CronManager {
 
-	private static final Logger log = Logger.getLogger(CronManagerImpl.class.getSimpleName());
+	private static final Logger log = LoggerFactory.getLogger(CronManagerImpl.class);
 
 	private final Spikeify sfy;
 
@@ -45,7 +45,7 @@ public class CronManagerImpl implements CronManager {
 			return newJob;
 		}
 		catch (AerospikeException e) {
-			log.log(Level.SEVERE, "Failed to create cron job: " + newJob, e);
+			log.error("Failed to create cron job: " + newJob, e);
 			throw new CronJobException("Failed to create cron job: " + newJob, HttpURLConnection.HTTP_BAD_REQUEST);
 		}
 	}
@@ -68,7 +68,7 @@ public class CronManagerImpl implements CronManager {
 			});
 		}
 		catch (AerospikeException e) {
-			log.log(Level.SEVERE, "Failed to update cron job: " + job, e);
+			log.error("Failed to update cron job: " + job, e);
 			throw new CronJobException("Failed to update cron job: " + job, HttpURLConnection.HTTP_BAD_REQUEST);
 		}
 	}

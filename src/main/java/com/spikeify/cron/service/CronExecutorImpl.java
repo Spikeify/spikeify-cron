@@ -10,12 +10,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CronExecutorImpl implements CronExecutor {
 
-	private static final Logger log = Logger.getLogger(CronExecutorImpl.class.getSimpleName());
+	private static final Logger log = LoggerFactory.getLogger(CronExecutorImpl.class);
 
 	public CronExecutorImpl() {
 
@@ -27,7 +27,7 @@ public class CronExecutorImpl implements CronExecutor {
 		Assert.notNull(job, "Missing job to run!");
 
 		if (!job.canRun()) {
-			log.warning("Unable to run: " + job + ",  - no schedule defined (job will not run)!");
+			log.warn("Unable to run: " + job + ",  - no schedule defined (job will not run)!");
 			return CronExecutorResult.fail(HttpURLConnection.HTTP_BAD_REQUEST, "Unable to run: " + job);
 		}
 
@@ -68,11 +68,11 @@ public class CronExecutorImpl implements CronExecutor {
 				return CronExecutorResult.ok(status);
 			}
 
-			log.severe("Http GET: " + target + ", returned: " + status);
+			log.error("Http GET: " + target + ", returned: " + status);
 			return new CronExecutorResult(CronJobResult.fail, status, "");
 		}
 		catch (Exception e) {
-			log.log(Level.SEVERE, "Failed to execute HTTP request to: " + target, e);
+			log.error("Failed to execute HTTP request to: " + target, e);
 			return CronExecutorResult.fail(HttpURLConnection.HTTP_INTERNAL_ERROR, e.getMessage());
 		}
 	}

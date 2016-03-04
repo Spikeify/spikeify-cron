@@ -10,6 +10,8 @@ import com.spikeify.cron.entities.CronJob;
 import com.spikeify.cron.exceptions.CronJobException;
 import com.spikeify.cron.utils.Assert;
 import com.spikeify.cron.utils.JsonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +20,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Logger;
 
 public class CronServiceImpl implements CronService {
 
-	private static final Logger log = Logger.getLogger(CronServiceImpl.class.getSimpleName());
+	private static final Logger log = LoggerFactory.getLogger(CronServiceImpl.class.getSimpleName());
 	private static final long DELTA = 10 * 1000L; // 10 seconds
 
 	private final CronManager manager;
@@ -111,7 +112,7 @@ public class CronServiceImpl implements CronService {
 			}
 			catch (CronJobException e) {
 				// should not happen ... but anyhow ... let's catch it
-				log.severe("Failed to update cron job: " + job);
+				log.error("Failed to update cron job: " + job);
 			}
 		}
 
