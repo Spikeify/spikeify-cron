@@ -136,6 +136,7 @@ public class CronJob {
 		name = jobName.trim();
 		nextRun = RUN_ENABLED;
 		lastModified = 0;
+		startTime = null;
 	}
 
 	public void setTarget(String newTarget) {
@@ -156,12 +157,15 @@ public class CronJob {
 
 	public boolean run() {
 
-		if (isDisabled() || target == null || intervalUnit == null) {
-			return false;
-		}
-
 		// not started ... and can be run
-		return (startTime == null && nextRun <= getTime());
+		return (canRun() && startTime == null && nextRun <= getTime());
+	}
+
+
+	public boolean canRun() {
+
+		return !(isDisabled() || target == null || intervalUnit == null);
+
 	}
 
 	public String getTarget(String rootUrl) {

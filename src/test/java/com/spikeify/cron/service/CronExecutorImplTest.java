@@ -3,6 +3,7 @@ package com.spikeify.cron.service;
 import com.spikeify.Spikeify;
 import com.spikeify.cron.TestHelper;
 import com.spikeify.cron.data.CronExecutorResult;
+import com.spikeify.cron.data.LastRunUpdater;
 import com.spikeify.cron.data.ScheduleUpdater;
 import com.spikeify.cron.entities.CronJob;
 import com.spikeify.cron.entities.enums.CronJobResult;
