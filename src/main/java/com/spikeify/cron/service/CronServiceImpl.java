@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.spikeify.cron.data.CronExecutorResult;
 import com.spikeify.cron.data.CronJobUpdater;
 import com.spikeify.cron.data.LastRunUpdater;
+import com.spikeify.cron.data.LockCronUpdater;
 import com.spikeify.cron.data.json.CronJobJSON;
 import com.spikeify.cron.entities.CronJob;
 import com.spikeify.cron.exceptions.CronJobException;
@@ -82,18 +83,31 @@ public class CronServiceImpl implements CronService {
 		for (CronJob job : list) {
 
 			try {
-				// remember time job was started
-				long startTime = job.getNextRun(); // take next run as start time if not smaller than 10s from current time
-				if (startTime <= System.currentTimeMillis() - DELTA) {
-					startTime = System.currentTimeMillis();
+				// refresh job
+				job = manager.get(job.getId());
+
+				// can we run the job?
+				if (job.run()) {
+					// remember time job was started
+					long startTime = job.getNextRun(); // take next run as start time if not smaller than 10s from current time
+					if (startTime <= System.currentTimeMillis() - DELTA) {
+						startTime = System.currentTimeMillis();
+					}
+
+					// execute
+					// update and lock cron job before executing so other threads will not start the job ( ... )
+					long lockTime = System.nanoTime();
+					job = manager.update(job, new LockCronUpdater(lockTime));
+
+					if (job.getStartedTime() == lockTime) {
+
+						CronExecutorResult result = executor.run(job, settings);
+
+						// set last run result and calculate next execution and store changes to database
+						manager.update(job, new LastRunUpdater(startTime, result.getJobResult(), result.getMessage()));
+						count++;
+					}
 				}
-
-				// execute
-				CronExecutorResult result = executor.run(job, settings);
-
-				// set last run result and calculate next execution and store changes to database
-				manager.update(job, new LastRunUpdater(startTime, result.getJobResult(), result.getMessage()));
-				count ++;
 			}
 			catch (CronJobException e) {
 				// should not happen ... but anyhow ... let's catch it

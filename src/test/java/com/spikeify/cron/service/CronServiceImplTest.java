@@ -5,6 +5,7 @@ import com.spikeify.cron.data.CronExecutorResult;
 import com.spikeify.cron.data.ScheduleUpdater;
 import com.spikeify.cron.data.json.CronJobJSON;
 import com.spikeify.cron.entities.CronJob;
+import com.spikeify.cron.entities.DummyCronJob;
 import com.spikeify.cron.entities.enums.CronJobResult;
 import com.spikeify.cron.entities.enums.RunEvery;
 import com.spikeify.cron.exceptions.CronJobException;
@@ -14,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -41,7 +43,7 @@ public class CronServiceImplTest {
 	@After
 	public void tearDown() {
 
-		sfy.truncateNamespace(sfy.getNamespace());
+	//	sfy.truncateNamespace(sfy.getNamespace());
 	}
 
 	@Test
@@ -226,5 +228,48 @@ public class CronServiceImplTest {
 		assertNull(compare.getRunToMinute());
 		assertNull(compare.getRunFromHour());
 		assertNull(compare.getRunFromMinute());
+	}
+
+	@Test
+	public void multipleThreadsRunningSameCronJobs() throws InterruptedException, CronJobException {
+
+
+		int WORKERS = 3;
+		Thread[] threads = new Thread[WORKERS];
+
+		List<CronJobJSON> jobs = new ArrayList<>();
+		jobs.add(new CronJobJSON(new DummyCronJob("one")));
+		jobs.add(new CronJobJSON(new DummyCronJob("two")));
+		jobs.add(new CronJobJSON(new DummyCronJob("three")));
+		service.importJobs(jobs, 0);
+
+
+		for (int i = 0; i < WORKERS; i++) {
+
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+
+					CronManager manager = new CronManagerImpl(sfy);
+					CronExecutor executor = new SlowCronExecutor();
+
+					CronServiceImpl service = new CronServiceImpl(manager, executor, null);
+					service.run();
+				}
+			};
+
+			threads[i] = new Thread(runnable);
+		}
+
+		for (int i = 0; i < WORKERS; i++) {
+			threads[i].start();
+		}
+		for (int i = 0; i < WORKERS; i++) {
+			threads[i].join();
+		}
+
+		// check all cron job should be stated only once
+		List<CronJob> list = service.list();
+
 	}
 }

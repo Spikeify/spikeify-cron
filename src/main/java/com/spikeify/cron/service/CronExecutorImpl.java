@@ -26,8 +26,8 @@ public class CronExecutorImpl implements CronExecutor {
 
 		Assert.notNull(job, "Missing job to run!");
 
-		if (!job.run()) {
-			log.warning("Unable to run: " + job);
+		if (!job.isStarted()) {
+			log.warning("Unable to run: " + job + ", already running!");
 			return CronExecutorResult.fail(HttpURLConnection.HTTP_BAD_REQUEST, "Unable to run: " + job);
 		}
 

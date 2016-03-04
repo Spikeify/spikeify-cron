@@ -70,6 +70,11 @@ public class CronJob {
 	protected Long lastRun;
 
 	/**
+	 * Time job was started ... to prevent other thread starting the same cron job
+	 */
+	protected Long startTime;
+
+	/**
 	 * Last execution result
 	 */
 	protected CronJobResult lastResult;
@@ -155,7 +160,8 @@ public class CronJob {
 			return false;
 		}
 
-		return (nextRun <= getTime());
+		// not started ... and can be run
+		return (startTime == null && nextRun <= getTime());
 	}
 
 	public String getTarget(String rootUrl) {
@@ -305,6 +311,7 @@ public class CronJob {
 		lastRun = runTime;
 		lastResult = result;
 		lastMessage = message != null ? message.trim() : null;
+		startTime = null; // unlock
 
 		calculateNextRun();
 	}
@@ -378,6 +385,21 @@ public class CronJob {
 		if (nextRun >= RUN_ENABLED) {
 			nextRun = RUN_DISABLED;
 		}
+	}
+
+	public void setStarted(long time) {
+
+		startTime = time;
+	}
+
+	public long getStartedTime() {
+
+		return startTime;
+	}
+
+	public boolean isStarted() {
+
+		return startTime != null;
 	}
 
 	@Override
