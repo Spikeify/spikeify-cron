@@ -4,6 +4,7 @@ import com.spikeify.Spikeify;
 import com.spikeify.cron.TestHelper;
 import com.spikeify.cron.data.CronJsonUpdater;
 import com.spikeify.cron.data.LastRunUpdater;
+import com.spikeify.cron.data.LockCronUpdater;
 import com.spikeify.cron.data.ScheduleUpdater;
 import com.spikeify.cron.data.json.CronJobJSON;
 import com.spikeify.cron.entities.CronJob;

@@ -17,7 +17,7 @@ public class LockCronUpdater implements CronJobUpdater {
 	@Override
 	public void update(CronJob job) {
 
-		if (!job.isStarted()) {
+		if (!job.isLocked()) {
 			job.setStarted(time);
 		}
 	}

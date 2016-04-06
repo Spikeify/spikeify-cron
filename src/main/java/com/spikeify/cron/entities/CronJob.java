@@ -410,11 +410,6 @@ public class CronJob {
 		return startTime;
 	}
 
-	public boolean isStarted() {
-
-		return startTime != null;
-	}
-
 	public boolean isLocked() {
 
 		return startTime != null &&

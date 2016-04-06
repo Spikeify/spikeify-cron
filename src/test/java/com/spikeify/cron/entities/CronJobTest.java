@@ -1,13 +1,35 @@
 package com.spikeify.cron.entities;
 
+import com.spikeify.Spikeify;
+import com.spikeify.cron.TestHelper;
+import com.spikeify.cron.data.LockCronUpdater;
 import com.spikeify.cron.entities.enums.CronJobResult;
 import com.spikeify.cron.entities.enums.RunEvery;
+import com.spikeify.cron.exceptions.CronJobException;
+import com.spikeify.cron.service.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
 
 public class CronJobTest {
+
+	Spikeify sfy;
+	CronManager manager;
+	CronExecutor executor;
+	CronService service;
+
+	@Before
+	public void setUp() {
+
+		sfy = TestHelper.getSpikeify();
+		sfy.truncateNamespace(sfy.getNamespace());
+
+		manager = new CronManagerImpl(sfy);
+		executor = new CronExecutorImpl();
+		service = new CronServiceImpl(manager, executor, null);
+	}
 
 	@Test
 	public void createJobTest() {
@@ -259,5 +281,24 @@ public class CronJobTest {
 		assertFalse(job.isLocked());        // it is unlocked and it can run
 		assertTrue(job.canRun());
 		assertTrue(job.run());
+	}
+
+
+	@Test
+	public void startDeadlockedJob() throws CronJobException {
+		// job was locked but never executed ... test if he is still locked after 1 minute
+		CronJob job = new CronJob("Bla");
+		job.id = "balabala";
+		job.lastRun = null;
+		job.nextRun = 1459859251979L;
+		job.startTime = 55001224521869L;
+		job.interval = 5;
+		job.intervalUnit = RunEvery.minute;
+		job.target = "/test";
+
+		sfy.update(job).now();
+
+		int count = service.run();
+		assertEquals(1, count);  // job was started
 	}
 }
