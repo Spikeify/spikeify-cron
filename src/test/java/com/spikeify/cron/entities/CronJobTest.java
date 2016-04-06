@@ -245,5 +245,19 @@ public class CronJobTest {
 		assertFalse(job.isLocked());
 		assertTrue(job.canRun());
 		assertTrue(job.run());
+
+		// job is locked start time is set and next run is now
+		job.nextRun = System.currentTimeMillis();
+		job.setStarted(System.nanoTime());
+		assertTrue(job.isLocked());
+		assertTrue(job.canRun()); // it could run if were not locked
+		assertFalse(job.run());
+
+		// at least one minute must past from next run to unlock job with start time set
+		job.nextRun = System.currentTimeMillis() - 60L * 1000;
+		job.setStarted(System.nanoTime());
+		assertFalse(job.isLocked());        // it is unlocked and it can run
+		assertTrue(job.canRun());
+		assertTrue(job.run());
 	}
 }
