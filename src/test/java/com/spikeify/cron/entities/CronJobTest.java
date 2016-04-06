@@ -212,4 +212,38 @@ public class CronJobTest {
 		assertEquals("first run: 2035-10-11 19:59, runs every day at: 23:25, target: http://some.url/target, next run: 2035-10-11 23:25", job.getDescription(true, -11));
 		assertEquals("first run: 2035-10-12 18:59, runs every day at: 22:25, target: http://some.url/target, next run: 2035-10-12 22:25", job.getDescription(true, 12));
 	}
+
+	@Test
+	public void testLockedCronJob() {
+
+		// job was locked but never executed ... test if he is still locked after 1 minute
+		/*"id": "vGyezkyQC7",
+			"name": "repositoryScan",
+			"firstRun": null,
+			"lastRun": null,
+			"lastResult": "ok",
+			"nextRun": 1459859251979,
+			"interval": 5,
+			"intervalUnit": "minute",
+			"runFromHour": null,
+			"runFromMinute": null,
+			"runToHour": null,
+			"runToMinute": null,
+			"started": true,
+			"disabled": false,
+			"startedTime": 55001224521869,
+			"lastResultMessage": null*/
+
+		CronJob job = new CronJob("Bla");
+		job.lastRun = null;
+		job.nextRun = 1459859251979L;
+		job.startTime = 55001224521869L;
+		job.interval = 5;
+		job.intervalUnit = RunEvery.minute;
+		job.target = "/test";
+
+		assertFalse(job.isLocked());
+		assertTrue(job.canRun());
+		assertTrue(job.run());
+	}
 }

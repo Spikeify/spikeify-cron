@@ -33,6 +33,8 @@ public class CronJob {
 
 	private static final long RUN_ENABLED = 1L;
 
+	private static final long START_LOCK_DURATION = 60L * 1000L; // 60 seconds
+
 	/**
 	 * Uniquely generated id
 	 */
@@ -126,6 +128,8 @@ public class CronJob {
 
 	protected Integer runToMinute;
 
+	private boolean locked;
+
 	protected CronJob() {
 		// Aerospike only
 	}
@@ -159,7 +163,7 @@ public class CronJob {
 	public boolean run() {
 
 		// not started ... and can be run
-		return (canRun() && startTime == null && nextRun <= getTime());
+		return (canRun() && !isLocked() && nextRun <= getTime());
 	}
 
 
@@ -409,6 +413,12 @@ public class CronJob {
 	public boolean isStarted() {
 
 		return startTime != null;
+	}
+
+	public boolean isLocked() {
+
+		return startTime != null &&
+			nextRun + START_LOCK_DURATION > System.currentTimeMillis(); // 1 minute lock at the most
 	}
 
 	@Override

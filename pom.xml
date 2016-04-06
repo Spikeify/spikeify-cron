@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.spikeify</groupId>
     <artifactId>cron</artifactId>
-    <version>0.2.33</version>
+    <version>0.2.34</version>
     <packaging>jar</packaging>
 
     <name>Spikeify Cron Library</name>
